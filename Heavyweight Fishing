@@ -1,5 +1,4 @@
-
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/OPEN-SOURCE-UI-ROBLOX/refs/heads/main/X2ZU%20UI%20ROBLOX%20OPEN%20SOURCE/DummyUi-leak-by-x2zu/fetching-main/Tools/Framework.luau"))()
 local Icons = {
 	["accessibility"] = "rbxassetid://10709751939",
 	["activity"] = "rbxassetid://10709752035",
@@ -820,87 +819,123 @@ local Icons = {
 	["zoomin"] = "rbxassetid://10747384552",
 	["zoomout"] = "rbxassetid://10747384679"
 }
-local Window = Library:create{
-    Theme = Library.Themes.Serika
-}
-
-local Tabs = {
-Main = Window:tab{Icon = "rbxassetid://6034996695", Name = "Aimbot"}
-
-tab:button({
-    Name = "show prompt",
-    Callback = function()
-        tab:prompt{
-            Title = "baby",
-            Text = "shark doo doo doo doo im blank lmao",
-            Buttons = {
-                Ok = function()
-                    tab:prompt{
-                        Followup = true,
-                        Title = "really?",
-                        Text = "you sure?=",
-                        Buttons = {
-                            Yes = function()
-                                tab:prompt{
-                                    Followup = true,
-                                    Title = "xd",
-                                    Text = "sus",
-                                    Buttons = {
-                                        balls = function()
-                                            gui:set_status("github")
-                                        end,
-                                        anal = function()
-                                            gui:set_Status("money")
-                                        end
-                                    }
-                                }
-                            end,
-                        }
-                    }
-                end,
-            }
-        }
-    end,
-})
-tab:keybind({Callback = function()
-    gui:prompt()
-end,})
-tab:dropdown({
-    Name = "Dropdown",
-    Description = "yeeeeeeeeeeeeeeeeeeeboi",
-    StartingText = "Bodypart",
-    Items = {
-        "Head",
-        "Torso",
-        "Random"
+local MainUI = game.Players.LocalPlayer.PlayerGui:WaitForChild("MainGui")
+local Window = Library:Window({
+    Title = "Heavyweight Fising",
+    Desc = "v0.1",
+    Icon = Icons["fish"],
+    Theme = "Dark",
+    Config = {
+        Keybind = Enum.KeyCode.LeftControl,
+        Size = UDim2.new(0, 500, 0, 400)
+    },
+    CloseUIButton = {
+        Enabled = true,
+        Text = "Toggle"
     }
 })
-tab:dropdown({
-    Name = "yes",
-    StartingText = "Number",
-    Items = {
-        {"One", 1},
-        {"Two", 2},
-        {"Three", 3}
-    },
-    Description = "amongu s",
-    Callback = function(v)
-        print(v, "clicked")
-    end,
-})
-local cum = tab:slider({Callback = function(v)
-    gui:set_status(v)
+
+local Tabs = {
+Main = Window:Tab({Title = "Catch Fish", Icon = "fish"}),
+Sell = Window:Tab({Title = "Sell Fish", Icon = "coin"}),
+Teleport = Window:Tab({Title = "Main", Icon = "move"})
+}
+Tabs.Main:Section({Title = "Fish"})
+Tabs.Main:Toggle({
+Title = "Freeze Position",
+Value = false,
+Callback = function(v)
+_G.FreezePosition = v
+end})
+Tabs.Main:Toggle({
+Title = "Balance Fish Bar",
+Value = false,
+Callback = function(v)
+_G.BalanceFishBar = v
+end})
+Tabs.Main:Toggle({
+Title = "Auto Fish",
+Value = false,
+Callback = function(v)
+_G.AutoFish = v
+end})
+Tabs.Main:Section({Title = "Skill"})
+Tabs.Main:Toggle({
+Title = "Auto Skill Z",
+Value = false,
+Callback = function(v)
+_G.AutoZ = v
+end})
+Tabs.Main:Toggle({
+Title = "Auto Skill X",
+Value = false,
+Callback = function(v)
+_G.AutoX = v
+end})
+Tabs.Main:Toggle({
+Title = "Auto Skill C",
+Value = false,
+Callback = function(v)
+_G.AutoC = v
+end})
+Tabs.Main:Toggle({
+Title = "Auto Skill V",
+Value = false,
+Callback = function(v)
+_G.AutoV = v
 end})
 
-tab:textbox({Callback = function(v)
-    gui:prompt{Text = v}
-end,})
+Tabs.Sell:Section({Title = "Sell"})
+Tabs.Sell:Toggle({
+Title = "Auto Sell All Fish",
+Value = false,
+Callback = function(v)
+_G.AutoSellAll = v
+end})
 
-tab:color_picker({
-    Name = "your mom's color",
-    Style = Library.ColorPickerStyles.Legacy,
-    Description = "Click to adjust color...",
-    Callback = function(color)
-        print(color)
-    end,
-})
+Tabs.Teleport:Section({Title = "Teleport"})
+local Islands = {
+    {n = 1, fn = function() return workspace.Map["Map 1"].House1 end},
+    {n = 2, fn = function() return workspace.Map["Map 2"].House2 end},
+    {n = 3, fn = function() return workspace.Map["Map 3"]:GetChildren()[11] end},
+    {n = 4, fn = function() return workspace.Map["Map 4"].Model end},
+    {n = 5, fn = function() return workspace.Map["Map 5"].Bait end},
+    {n = 6, fn = function() return workspace.Map["Map 6"].Folder:GetChildren()[33] end},
+    {n = 7, fn = function() return workspace.Map["Map 7"].New:GetChildren()[72].Grass end},
+    {n = 8, fn = function() return workspace.Map["Map 8"]:GetChildren()[3] end},
+    {n = 9, fn = function() return workspace.Map["Map 9"].Folder:GetChildren()[33] end},
+}
+for _, Island in ipairs(Islands) do
+    Tabs.Teleport:Button({
+        Title = "Teleport Island " .. Island.n,
+        Callback = function() pcall(function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Island.fn().CFrame end) end
+    })
+end
+task.spawn(function()
+while wait(0.5) do
+if _G.AutoFish and game.Players.LocalPlayer.Character and not game.Players.LocalPlayer.Character:GetAttribute("Fishing") and not MainUI.Fishing.Visible then
+game.ReplicatedStorage.Events.Fishing:FireServer()
+end
+end
+end)
+game:GetService("RunService").RenderStepped:Connect(function()
+game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = _G.FreezePosition
+if _G.BalanceFishBar then
+game:GetService("Players").LocalPlayer.PlayerGui.MainGui.Fishing.BarFrame.Bar.Position = game:GetService("Players").LocalPlayer.PlayerGui.MainGui.Fishing.BarFrame.Position
+end
+if _G.AutoZ then
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("UseSkill"):FireServer("Z")
+end
+if _G.AutoX then
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("UseSkill"):FireServer("X")
+end
+if _G.AutoC then
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("UseSkill"):FireServer("C")
+end
+if _G.AutoV then
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("UseSkill"):FireServer("V")
+end
+if _G.AutoSellAll then
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SellFish"):FireServer("All")
+end
+end)
