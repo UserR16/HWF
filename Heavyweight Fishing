@@ -1,27 +1,65 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/NemesisUI.lua"))()
+local CascadeUI = loadstring(game:HttpGet('https://raw.githubusercontent.com/SquidGurr/CascadeUI/main/CascadeUI.lua'))()
+local Window = CascadeUI:CreateWindow({Title = "Heavyweight Fishing", Size = UDim2.new(0, 550, 0, 400), Position = UDim2.new(0.5, -275, 0.5, -200)})
+
+local MainTab = Window:CreateTab("Catch Fish")
+local SellTab = Window:CreateTab("Sell Fish")
+local TeleTab = Window:CreateTab("Teleport")
+
+local FishSection = MainTab:CreateSection("Fish")
+FishSection:CreateToggle({Name = "Freeze Position", Default = false, Callback = function(v) _G.FreezePosition = v end})
+FishSection:CreateToggle({Name = "Balance Fish Bar", Default = false, Callback = function(v) _G.BalanceFishBar = v end})
+FishSection:CreateToggle({Name = "Auto Fish", Default = false, Callback = function(v) _G.AutoFish = v end})
+
+local SkillSection = MainTab:CreateSection("Skill")
+SkillSection:CreateToggle({Name = "Auto Skill Z", Default = false, Callback = function(v) _G.AutoZ = v end})
+SkillSection:CreateToggle({Name = "Auto Skill X", Default = false, Callback = function(v) _G.AutoX = v end})
+SkillSection:CreateToggle({Name = "Auto Skill C", Default = false, Callback = function(v) _G.AutoC = v end})
+SkillSection:CreateToggle({Name = "Auto Skill V", Default = false, Callback = function(v) _G.AutoV = v end})
+
+local SellSection = SellTab:CreateSection("Sell")
+SellSection:CreateToggle({Name = "Auto Sell All Fish", Default = false, Callback = function(v) _G.AutoSellAll = v end})
+
+local TpSection = TeleTab:CreateSection("Teleport")
+local Islands = {
+    {n = 1, fn = function() return workspace.Map["Map 1"].House1 end},
+    {n = 2, fn = function() return workspace.Map["Map 2"].House2 end},
+    {n = 3, fn = function() return workspace.Map["Map 3"]:GetChildren()[11] end},
+    {n = 4, fn = function() return workspace.Map["Map 4"].Model end},
+    {n = 5, fn = function() return workspace.Map["Map 5"].Bait end},
+    {n = 6, fn = function() return workspace.Map["Map 6"].Folder:GetChildren()[33] end},
+    {n = 7, fn = function() return workspace.Map["Map 7"].New:GetChildren()[72].Grass end},
+    {n = 8, fn = function() return workspace.Map["Map 8"]:GetChildren()[3] end},
+    {n = 9, fn = function() return workspace.Map["Map 9"].Folder:GetChildren()[33] end}
+}
+
+for _, Island in ipairs(Islands) do
+    TpSection:CreateButton({Name = "Teleport Island "..Island.n, Callback = function() pcall(function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Island.fn().CFrame + Vector3.new(0, 5, 0) end) end})
+end
+
 local MainUI = game.Players.LocalPlayer.PlayerGui:WaitForChild("MainGui")
-local Window = Library:Window({Title = "Heavyweight Fishing",Desc = "v0.1",Theme = "Dark",Config = {Keybind = Enum.KeyCode.LeftControl,Size = UDim2.new(0,500,0,400)},CloseUIButton = {Enabled = true,Text = "Toggle"}})
-local Tabs = {Main = Window:Tab({Title = "Catch Fish"}),Sell = Window:Tab({Title = "Sell Fish"}),Teleport = Window:Tab({Title = "Teleport"})}
-Tabs.Main:Section({Title = "Fish"})
-Tabs.Main:Toggle({Title = "Freeze Position",Value = false,Callback = function(v)_G.FreezePosition = v end})
-Tabs.Main:Toggle({Title = "Balance Fish Bar",Value = false,Callback = function(v)_G.BalanceFishBar = v end})
-Tabs.Main:Toggle({Title = "Auto Fish",Value = false,Callback = function(v)_G.AutoFish = v end})
-Tabs.Main:Section({Title = "Skill"})
-Tabs.Main:Toggle({Title = "Auto Skill Z",Value = false,Callback = function(v)_G.AutoZ = v end})
-Tabs.Main:Toggle({Title = "Auto Skill X",Value = false,Callback = function(v)_G.AutoX = v end})
-Tabs.Main:Toggle({Title = "Auto Skill C",Value = false,Callback = function(v)_G.AutoC = v end})
-Tabs.Main:Toggle({Title = "Auto Skill V",Value = false,Callback = function(v)_G.AutoV = v end})
-Tabs.Sell:Section({Title = "Sell"})
-Tabs.Sell:Toggle({Title = "Auto Sell All Fish",Value = false,Callback = function(v)_G.AutoSellAll = v end})
-Tabs.Teleport:Section({Title = "Teleport"})
-local Islands = {{n=1,fn=function()return workspace.Map["Map 1"].House1 end},{n=2,fn=function()return workspace.Map["Map 2"].House2 end},{n=3,fn=function()return workspace.Map["Map 3"]:GetChildren()[11] end},{n=4,fn=function()return workspace.Map["Map 4"].Model end},{n=5,fn=function()return workspace.Map["Map 5"].Bait end},{n=6,fn=function()return workspace.Map["Map 6"].Folder:GetChildren()[33] end},{n=7,fn=function()return workspace.Map["Map 7"].New:GetChildren()[72].Grass end},{n=8,fn=function()return workspace.Map["Map 8"]:GetChildren()[3] end},{n=9,fn=function()return workspace.Map["Map 9"].Folder:GetChildren()[33] end}}
-for _,Island in ipairs(Islands) do Tabs.Teleport:Button({Title = "Teleport Island "..Island.n,Callback = function()pcall(function()game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Island.fn().CFrame+Vector3.new(0,5,0)end)end})end
-task.spawn(function()while wait(0.5)do if _G.AutoFish and game.Players.LocalPlayer.Character and not game.Players.LocalPlayer.Character:GetAttribute("Fishing") and not MainUI.Fishing.Visible then game.ReplicatedStorage.Events.Fishing:FireServer()end end end)
-game:GetService("RunService").RenderStepped:Connect(function()if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")then game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = _G.FreezePosition or false end
-if _G.BalanceFishBar and MainUI:FindFirstChild("Fishing")then local bar=MainUI.Fishing:FindFirstChild("BarFrame")if bar and bar:FindFirstChild("Bar")then bar.Bar.Position=bar.Position end end
-if _G.AutoZ then game.ReplicatedStorage.Events.UseSkill:FireServer("Z")end
-if _G.AutoX then game.ReplicatedStorage.Events.UseSkill:FireServer("X")end
-if _G.AutoC then game.ReplicatedStorage.Events.UseSkill:FireServer("C")end
-if _G.AutoV then game.ReplicatedStorage.Events.UseSkill:FireServer("V")end
-if _G.AutoSellAll then game.ReplicatedStorage.Events.SellFish:FireServer("All")end
+
+task.spawn(function()
+    while wait(0.5) do
+        if _G.AutoFish and game.Players.LocalPlayer.Character and not game.Players.LocalPlayer.Character:GetAttribute("Fishing") and not MainUI.Fishing.Visible then
+            game.ReplicatedStorage.Events.Fishing:FireServer()
+        end
+    end
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    local char = game.Players.LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        char.HumanoidRootPart.Anchored = _G.FreezePosition or false
+    end
+    if _G.BalanceFishBar and MainUI:FindFirstChild("Fishing") then
+        local barFrame = MainUI.Fishing:FindFirstChild("BarFrame")
+        if barFrame and barFrame:FindFirstChild("Bar") then
+            barFrame.Bar.Position = barFrame.Position
+        end
+    end
+    if _G.AutoZ then game.ReplicatedStorage.Events.UseSkill:FireServer("Z") end
+    if _G.AutoX then game.ReplicatedStorage.Events.UseSkill:FireServer("X") end
+    if _G.AutoC then game.ReplicatedStorage.Events.UseSkill:FireServer("C") end
+    if _G.AutoV then game.ReplicatedStorage.Events.UseSkill:FireServer("V") end
+    if _G.AutoSellAll then game.ReplicatedStorage.Events.SellFish:FireServer("All") end
 end)
