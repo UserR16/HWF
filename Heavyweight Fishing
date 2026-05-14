@@ -1,4 +1,4 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/OPEN-SOURCE-UI-ROBLOX/refs/heads/main/X2ZU%20UI%20ROBLOX%20OPEN%20SOURCE/DummyUi-leak-by-x2zu/fetching-main/Tools/Framework.luau"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/loader/refs/heads/main/NemesisUI.lua"))()
 local MainUI = game.Players.LocalPlayer.PlayerGui:WaitForChild("MainGui")
 local Window = Library:Window({Title = "Heavyweight Fishing",Desc = "v0.1",Theme = "Dark",Config = {Keybind = Enum.KeyCode.LeftControl,Size = UDim2.new(0,500,0,400)},CloseUIButton = {Enabled = true,Text = "Toggle"}})
 local Tabs = {Main = Window:Tab({Title = "Catch Fish"}),Sell = Window:Tab({Title = "Sell Fish"}),Teleport = Window:Tab({Title = "Teleport"})}
